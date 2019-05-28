@@ -5,7 +5,7 @@ import gold from './img/gold.png';
 const Amount = ({amount}) => {
 	return (
 			<div className="amountCont">
-			<img src={gold} alt='distance' width='80px'/>
+			<img src={gold} alt='distance' width='80px' height='80px'/>
 			<p className="distance">{amount} Kgs</p>
 			</div>
 	);
