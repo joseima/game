@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-const Play = () => {
+const Play = ({race}) => {
 	return (
 			<div className="amountCont">
-			<button type="button" className="play">Play</button>
+			<button type="button" onClick={race} className="play">Race!!</button>
 			</div>
 	);
 };

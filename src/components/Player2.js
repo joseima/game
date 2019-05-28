@@ -2,19 +2,18 @@ import React from 'react';
 import './css/player.css';
 import ship from './img/space.png';
 
-const Player2 = () => {
+const Player2 = ({vehicle2, timeP2, tripsP2}) => {
 	return (
-		<div className="playerCont">
+<div className="playerCont">
 			<h3 className="color2">Player 2</h3>
-			<h4>"Pepe geres"</h4>
-			<p className="specie">Human</p>
+			<h4>{vehicle2.name}</h4>
+			<p className="specie">{vehicle2.model}</p>
 			
 			<img src={ship} alt='ship' width='50px'/>
-			<h4 className="color1 totHours">5664566 hours</h4>
-			<h4 className=" color1 totTrips">5664566 trips</h4>
-			<p className="shipName">"Nave espacial"</p>
-			<p className="shipSpeed">200 Kms/h</p>
-			<p className="shipCapacity">"Nave espacial"</p>
+			<p className="shipSpeed">{vehicle2.max_atmosphering_speed} Kms/h</p>
+			<p className="shipCapacity">{vehicle2.cargo_capacity} Kgs</p>
+			<p className="color1 totHours">{timeP2} hours per trip</p>
+			<p className=" color1 totTrips">{tripsP2} amount of trips</p>
 		</div>
 	);
 };

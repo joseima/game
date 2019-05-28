@@ -1,10 +1,10 @@
 import React from 'react';
 
 
-const Change = () => {
+const Change = ({chargePlayers}) => {
 	return (
 			<div className="changeCont">
-			<button type="button" className="change">Change Players</button>
+			<button type="button" onClick={chargePlayers} className="change">Change Players</button>
 			</div>
 	);
 };

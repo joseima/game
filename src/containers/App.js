@@ -14,59 +14,104 @@ class App extends Component {
     super()
     this.state = {
       distance:0,
+      winner: "",
       amount:0,
+      timeP1:null,
+      tripsP1:null,
       scoreP1:0,
+      timeP2:null,
+      tripsP2:null,
       scoreP2:0,
-      vehicles:[],
       vehicle1: [],
-      vehicle2: []
+      vehicle2:  [],
     }
   }
 
 
+  
+
+chargePlayers = () => {
+ fetch('https://swapi.co/api/vehicles')
+    .then(response => response.json())
+    .then(data =>  {
+      this.setState({vehicle1:data.results[Math.floor(Math.random() * 9) ] });
+      this.setState({vehicle2:data.results[Math.floor(Math.random() * 9) ] });
+    });
+
+     this.setState({distance: Math.floor(Math.random() * 10000) + 1000});
+
+     this.setState({amount: Math.floor(Math.random() * 1000) + 100});
+
+     this.setState({tripsP1: null});
+     this.setState({timeP1: null});
+     this.setState({tripsP2: null});
+     this.setState({timeP2: null});
+     this.setState({winner: ""});
+
+
+}
 
 
 
 componentDidMount () {
-
-  const getRndInteger = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1) ) + min;
-}
-
-
-  this.setState({distance: getRndInteger (1000, 99999)});
-
- 
-  this.setState({amount: getRndInteger (100, 9999)});
-
-
-  fetch('https://swapi.co/api/vehicles')
+ fetch('https://swapi.co/api/vehicles')
     .then(response => response.json())
-    .then(data => this.setState({vehicles:data.results}));
+    .then(data =>  {
+      this.setState({vehicle1:data.results[Math.floor(Math.random() * 9) ] });
+      this.setState({vehicle2:data.results[Math.floor(Math.random() * 9) ] });
+    });
+
+     this.setState({distance: Math.floor(Math.random() * 10000) + 1000});
+
+     this.setState({amount: Math.floor(Math.random() * 1000) + 100});
 
 
-
-
-  this.setState({vehicle1: this.state.vehicles[getRndInteger (0, 9)]});
-  console.log(this.state.vehicle1);
 }
+
+race = () => {
+  const amountTripsP1 =  parseInt((this.state.amount*2)/this.state.vehicle1.cargo_capacity);
+  this.setState({tripsP1: amountTripsP1});
+
+  const timePerTripP1 =  parseInt(this.state.distance/this.state.vehicle1.max_atmosphering_speed);
+   this.setState({timeP1: timePerTripP1});
+
+  let totalTimeP1 = parseInt(amountTripsP1 * timePerTripP1);
+  
+  const amountTripsP2 =  parseInt((this.state.amount*2)/this.state.vehicle2.cargo_capacity);
+  this.setState({tripsP2: amountTripsP2});
+
+  const timePerTripP2 =  parseInt(this.state.distance/this.state.vehicle2.max_atmosphering_speed);
+  this.setState({timeP2: timePerTripP2});
+
+  let totalTimeP2 = parseInt(amountTripsP2 * timePerTripP2);
+
+
+   if (totalTimeP1 > totalTimeP2) {
+      this.setState({winner: "Player 2 Wins"});
+      this.setState({scoreP2: this.state.scoreP2 +1})
+
+   } else if (totalTimeP1 < totalTimeP2) {
+      this.setState({winner: "Player 1 Wins"});
+      this.setState({scoreP1:  this.state.scoreP1 +1})
+  } else { this.setState({winner: "It's a draw"}) }
+
+
+
+}
+
+
 
 render () {
 
-  const {distance, amount, vehicle1, vehicle2 } = this.state;
+  const {distance, amount, vehicle1, vehicle2, winner, tripsP1, tripsP2, timeP1, timeP2, scoreP1, scoreP2 } = this.state;
   
-  if (this.state.vehicles.length > 0) {
-      console.log(vehicle1);
-  }
-  
-
     return /*!this.state.players.length ? <h1>Loading</h1> :*/  (
       <div className="back">
-        <Player1 vehicle1={vehicle1} />
-        <Score distance={distance} amount={amount}/>
-        <Player2 vehicle2={vehicle2} />       
-        <Play />
-        <Change />
+        <Player1 vehicle1={vehicle1}  tripsP1={tripsP1} timeP1={timeP1} />
+        <Score distance={distance} amount={amount} scoreP1={scoreP1} scoreP2={scoreP2} winner={winner} />
+        <Player2 vehicle2={vehicle2}  tripsP2={tripsP2} timeP2={timeP2} />       
+        <Play race={this.race} />
+        <Change chargePlayers={this.chargePlayers} />
       </div>
       );
   }
